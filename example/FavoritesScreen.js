@@ -478,10 +478,15 @@ var FavoritesScreen = React.createClass({
         });
         break;
       case 'titleImage':
+        const eventId2 = 'MY_UNIQUE_EVENT_ID_2';
+        NativeAppEventEmitter.addListener(eventId2, function (event) {
+          AlertIOS.alert('Kaki', 'Pipi Pipi');
+        });
         Controllers.NavigationControllerIOS("favorites_nav").push({
           title: "More",
           titleImage: require('./img/turtle.png'),
-          component: "FavoritesScreen"
+          component: "FavoritesScreen",
+          onTitlePress: eventId2
         });
         break;
     }
