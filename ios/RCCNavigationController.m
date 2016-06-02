@@ -9,6 +9,9 @@
 NSString const *CALLBACK_ASSOCIATED_KEY = @"RCCNavigationController.CALLBACK_ASSOCIATED_KEY";
 NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSOCIATED_ID";
 
+NSString const *TITLE_IMAGE_CALLBACK_ASSOCIATED_KEY = @"RCCNavigationController.TITLE_IMAGE_CALLBACK_ASSOCIATED_KEY";
+NSString const *TITLE_IMAGE_CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.TITLE_IMAGE_CALLBACK_ASSOCIATED_ID";
+
 - (instancetype)initWithProps:(NSDictionary *)props children:(NSArray *)children globalProps:(NSDictionary*)globalProps bridge:(RCTBridge *)bridge
 {
   NSString *component = props[@"component"];
@@ -23,7 +26,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   NSString *title = props[@"title"];
   if (title) viewController.title = title;
   
-  [self setTitleIamgeForVC:viewController titleImageData:props[@"titleImage"]];
+  [self setTitleIamgeForVC:viewController titleImageData:props[@"titleImage"] onTitlePress:props[@"onTitlePress"]];
   
   NSArray *leftButtons = props[@"leftButtons"];
   if (leftButtons)
@@ -84,7 +87,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
     NSString *title = actionParams[@"title"];
     if (title) viewController.title = title;
     
-    [self setTitleIamgeForVC:viewController titleImageData:actionParams[@"titleImage"]];
+    [self setTitleIamgeForVC:viewController titleImageData:actionParams[@"titleImage"] onTitlePress:actionParams[@"onTitlePress"]];
     
     NSString *backButtonTitle = actionParams[@"backButtonTitle"];
     if (backButtonTitle)
@@ -152,7 +155,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
     NSString *title = actionParams[@"title"];
     if (title) viewController.title = title;
     
-    [self setTitleIamgeForVC:viewController titleImageData:actionParams[@"titleImage"]];
+    [self setTitleIamgeForVC:viewController titleImageData:actionParams[@"titleImage"] onTitlePress:actionParams[@"onTitlePress"]];
     
     NSArray *leftButtons = actionParams[@"leftButtons"];
     if (leftButtons)
@@ -193,7 +196,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   
   if ([performAction isEqualToString:@"setTitleImage"])
   {
-    [self setTitleIamgeForVC:self.topViewController titleImageData:actionParams[@"titleImage"]];
+    [self setTitleIamgeForVC:self.topViewController titleImageData:actionParams[@"titleImage"] onTitlePress:actionParams[@"onTitlePress"]];
     return;
   }
   
@@ -204,12 +207,12 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
     
     NSNumber *setHidden = actionParams[@"hidden"];
     BOOL isHiddenBool = setHidden ? [setHidden boolValue] : NO;
-  
+    
     RCCViewController *topViewController = ((RCCViewController*)self.topViewController);
     topViewController.navigatorStyle[@"navBarHidden"] = setHidden;
     [topViewController setNavBarVisibilityChange:animatedBool];
     
-    }
+  }
 }
 
 -(void)onButtonPress:(UIBarButtonItem*)barButtonItem
@@ -221,6 +224,19 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
    {
      @"type": @"NavBarButtonPress",
      @"id": buttonId ? buttonId : [NSNull null]
+   }];
+}
+
+-(void)onTitleImagePress:(UITapGestureRecognizer*)gesture
+{
+  UIImageView *titleView = [gesture view];
+  NSString *callbackId = objc_getAssociatedObject(titleView, &TITLE_IMAGE_CALLBACK_ASSOCIATED_KEY);
+  if (!callbackId) return;
+  NSString *titleImageId = objc_getAssociatedObject(titleView, &TITLE_IMAGE_CALLBACK_ASSOCIATED_ID);
+  [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:callbackId body:@
+   {
+     @"type": @"NavBarTitleImagePress",
+     @"id": titleImageId ? titleImageId : [NSNull null]
    }];
 }
 
@@ -277,7 +293,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   }
 }
 
--(void)setTitleIamgeForVC:(UIViewController*)viewController titleImageData:(id)titleImageData
+-(void)setTitleIamgeForVC:(UIViewController*)viewController titleImageData:(id)titleImageData onTitlePress:(id)onTitlePress
 {
   if (!titleImageData || [titleImageData isEqual:[NSNull null]])
   {
@@ -288,7 +304,16 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   UIImage *titleImage = [RCTConvert UIImage:titleImageData];
   if (titleImage)
   {
-    viewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
+    UIImageView *titleImageView = [[UIImageView alloc] initWithImage:titleImage];
+
+    if (onTitlePress) {
+      objc_setAssociatedObject(titleImageView, &TITLE_IMAGE_CALLBACK_ASSOCIATED_KEY, onTitlePress, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+      UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTitleImagePress:)];
+      titleImageView.userInteractionEnabled = YES;
+      [titleImageView addGestureRecognizer:singleTap];
+    }
+    
+    viewController.navigationItem.titleView = titleImageView;
   }
 }
 
