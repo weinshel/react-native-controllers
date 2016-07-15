@@ -8,7 +8,6 @@
 
 #import "RCTHelpers.h"
 #import "RCTView.h"
-#import "RCTScrollView.h"
 
 @implementation RCTHelpers
 
@@ -74,5 +73,19 @@
     return removed;
 }
 
++(RCTScrollView*)getFirstScrollView:(RCTRootView*)reactRootView
+{
+    RCTScrollView *rctScrollView = nil;
+    NSArray* subviews = [RCTHelpers getAllSubviewsForView:reactRootView];
+    for (UIView *subview in subviews)
+    {
+        if ([subview isKindOfClass:[RCTScrollView class]])
+        {
+            rctScrollView = (RCTScrollView*)subview;
+            break;
+        }
+    }
+    return rctScrollView;
+}
 
 @end

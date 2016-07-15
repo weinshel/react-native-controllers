@@ -30,6 +30,8 @@
 		D85082FE1CBCF8A800FDB961 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = D85082C31CBCF42400FDB961 /* MMDrawerVisualState.m */; };
 		D85082FF1CBCF8A800FDB961 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D85082C51CBCF42400FDB961 /* MMExampleDrawerVisualStateManager.m */; };
 		D85083001CBCF8A800FDB961 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D85082C71CBCF42400FDB961 /* UIViewController+MMDrawerController.m */; };
+		D88BC2631D382A99008FF744 /* RCTScrollView+Hooks.m in Sources */ = {isa = PBXBuildFile; fileRef = D88BC2621D382A99008FF744 /* RCTScrollView+Hooks.m */; };
+		D88BC2661D383187008FF744 /* RCTScrollingNavBarHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D88BC2651D383187008FF744 /* RCTScrollingNavBarHandler.m */; };
 		D8D779981D04B7180050CFEA /* RCTHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D8D779971D04B7180050CFEA /* RCTHelpers.m */; };
 		D8E11C571CBD1F670018B644 /* RCCDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E11C561CBD1F670018B644 /* RCCDrawerController.m */; };
 /* End PBXBuildFile section */
@@ -97,6 +99,10 @@
 		D85082DE1CBCF54200FDB961 /* SidebarWunderlistAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarWunderlistAnimation.m; sourceTree = "<group>"; };
 		D85082DF1CBCF54200FDB961 /* TheSidebarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TheSidebarController.h; sourceTree = "<group>"; };
 		D85082E01CBCF54200FDB961 /* TheSidebarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheSidebarController.m; sourceTree = "<group>"; };
+		D88BC2611D382A99008FF744 /* RCTScrollView+Hooks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTScrollView+Hooks.h"; sourceTree = "<group>"; };
+		D88BC2621D382A99008FF744 /* RCTScrollView+Hooks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTScrollView+Hooks.m"; sourceTree = "<group>"; };
+		D88BC2641D383187008FF744 /* RCTScrollingNavBarHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTScrollingNavBarHandler.h; sourceTree = "<group>"; };
+		D88BC2651D383187008FF744 /* RCTScrollingNavBarHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTScrollingNavBarHandler.m; sourceTree = "<group>"; };
 		D8AFADBD1BEE6F3F00A4592D /* libReactNativeControllers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeControllers.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8D779961D04B7180050CFEA /* RCTHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTHelpers.h; sourceTree = "<group>"; };
 		D8D779971D04B7180050CFEA /* RCTHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTHelpers.m; sourceTree = "<group>"; };
@@ -226,6 +232,10 @@
 			children = (
 				D8D779961D04B7180050CFEA /* RCTHelpers.h */,
 				D8D779971D04B7180050CFEA /* RCTHelpers.m */,
+				D88BC2611D382A99008FF744 /* RCTScrollView+Hooks.h */,
+				D88BC2621D382A99008FF744 /* RCTScrollView+Hooks.m */,
+				D88BC2641D383187008FF744 /* RCTScrollingNavBarHandler.h */,
+				D88BC2651D383187008FF744 /* RCTScrollingNavBarHandler.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -287,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D85082EA1CBCF54200FDB961 /* TheSidebarController.m in Sources */,
+				D88BC2661D383187008FF744 /* RCTScrollingNavBarHandler.m in Sources */,
 				CC84A1A01C1A0C4E00B3A6A2 /* RCCNavigationController.m in Sources */,
 				D83514F61D29719A00D53758 /* RCCNotification.m in Sources */,
 				CC84A19F1C1A0C4E00B3A6A2 /* RCCManagerModule.m in Sources */,
@@ -294,6 +305,7 @@
 				D85082E81CBCF54200FDB961 /* SidebarLuvocracyAnimation.m in Sources */,
 				D85082E31CBCF54200FDB961 /* SidebarAirbnbAnimation.m in Sources */,
 				D84813191C8C5EB700051BAF /* RCCLightBox.m in Sources */,
+				D88BC2631D382A99008FF744 /* RCTScrollView+Hooks.m in Sources */,
 				CC84A19E1C1A0C4E00B3A6A2 /* RCCManager.m in Sources */,
 				D85082E21CBCF54200FDB961 /* RCCTheSideBarManagerViewController.m in Sources */,
 				D85082FC1CBCF8A800FDB961 /* MMDrawerBarButtonItem.m in Sources */,

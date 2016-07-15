@@ -7,6 +7,7 @@
 #import "RCCManager.h"
 #import "RCTConvert.h"
 #import "RCCExternalViewControllerProtocol.h"
+#import "RCTScrollingNavBarHandler.h"
 
 const NSInteger BLUR_STATUS_TAG = 78264801;
 const NSInteger BLUR_NAVBAR_TAG = 78264802;
@@ -20,6 +21,8 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 @property (nonatomic, strong) NSDictionary *originalNavBarImages;
 @property (nonatomic, strong) UIImageView *navBarHairlineImageView;
 @property (nonatomic, weak) id <UIGestureRecognizerDelegate> originalInteractivePopGestureDelegate;
+@property (nonatomic, strong) RCTScrollingNavBarHandler *rctScrollingNavBarHandler;
+@property (nonatomic) BOOL didLayoutSubviews;
 @end
 
 @implementation RCCViewController
@@ -136,6 +139,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   
   self.edgesForExtendedLayout = UIRectEdgeNone; // default
   self.automaticallyAdjustsScrollViewInsets = NO; // default
+  self.didLayoutSubviews = NO;
   
   self.navigatorStyle = [NSMutableDictionary dictionaryWithDictionary:navigatorStyle];
   
@@ -173,6 +177,15 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
     [super viewWillDisappear:animated];
     
     [self setStyleOnDisappear];
+}
+
+-(void)viewDidLayoutSubviews
+{
+  [super viewDidLayoutSubviews];
+  
+  self.didLayoutSubviews = YES;
+  
+  [self handleNavBarAutoScroll];
 }
 
 // most styles should be set here since when we pop a view controller that changed them
@@ -373,6 +386,11 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
       }
     }
+  
+  if (self.didLayoutSubviews)
+  {
+    [self handleNavBarAutoScroll];
+  }
 }
 
 -(void)storeOriginalNavBarImages {
@@ -400,6 +418,8 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
       self.navigationController.interactivePopGestureRecognizer.delegate = self.originalInteractivePopGestureDelegate;
       self.originalInteractivePopGestureDelegate = nil;
     }
+  
+    self.rctScrollingNavBarHandler = nil;
 }
 
 // only styles that can't be set on willAppear should be set here
@@ -544,6 +564,17 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   }
   
   return interactionName;
+}
+
+#pragma mark - NavBar Auto Scroll
+
+-(void)handleNavBarAutoScroll
+{
+  BOOL navBarAutoScroll = [self.navigatorStyle[@"navBarAutoScroll"] boolValue];
+  if (navBarAutoScroll && self.rctScrollingNavBarHandler == nil)
+  {
+    self.rctScrollingNavBarHandler = [[RCTScrollingNavBarHandler alloc] initWithViewController:self];
+  }
 }
 
 @end
